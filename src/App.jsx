@@ -1,0 +1,60 @@
+import { useState, useEffect } from 'react'
+import Header from './componentes/Header.jsx'
+import Formulario from "./componentes/Formulario.jsx"
+import ListadoPacientes from "./componentes/ListadoPacientes.jsx"
+
+function App() {
+//antes de return es conveniente para crear funciones o validaciones,etc
+
+  const [pacientes, setPacientes] = useState([])
+  const [paciente, setPaciente] = useState([])
+
+  useEffect(() => {
+    const obtenerLS = () => {
+      const pacientesLS = JSON.parse(localStorage.getItem(`pacientes`)) ?? [] 
+      setPacientes(pacientesLS)
+    }
+    obtenerLS()
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem(`pacientes`, JSON.stringify(pacientes))
+  }, [pacientes])
+
+  const eliminarPaciente = id => {
+    if(id) {
+
+    }
+
+    const pacientesActualizados = pacientes.filter( paciente => paciente.id != id)
+
+    setPacientes(pacientesActualizados)
+  }
+
+
+//en el return no se puede poner if ni funciones
+  return (
+    <>
+
+      <div className="container mx-auto mt-20">
+        <Header />
+        <div className="mt-12 md:flex">
+          <Formulario
+            pacientes={pacientes}
+            setPacientes={setPacientes}
+            paciente={paciente}
+            setPaciente={setPaciente} 
+          />
+          <ListadoPacientes 
+            pacientes={pacientes}
+            setPaciente={setPaciente}
+            eliminarPaciente={eliminarPaciente} 
+          />
+        </div>
+      </div>
+      
+    </>
+  )
+}
+
+export default App
